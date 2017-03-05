@@ -4,6 +4,8 @@ documents.
 
 # How to use
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/sinnerschrader/count-docu.svg)](https://greenkeeper.io/)
+
 Features are best explored by looking into the [documentation](//sinnerschrader.github.io/count-docu/).
 
 # How to integrate
