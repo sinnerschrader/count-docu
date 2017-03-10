@@ -6,6 +6,9 @@ documents.
 
 Features are best explored by looking into the [documentation](//sinnerschrader.github.io/count-docu/).
 
+# Prerequisite
+You have to install pandoc: http://pandoc.org/installing.html
+
 # How to integrate
 
 to start the generation:
