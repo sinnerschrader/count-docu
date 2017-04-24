@@ -11,6 +11,11 @@ Features are best explored by looking into the [documentation](//sinnerschrader.
 # Prerequisite
 You have to install pandoc: http://pandoc.org/installing.html
 
+Install [Graphviz](http://www.graphviz.org/Download.php) for UML diagrams via [plantuml](http://www.plantuml.com) 
+
+For PDF generation install [wkhtmltopdf](https://wkhtmltopdf.org/).
+
+
 # How to integrate
 
 to start the generation:
