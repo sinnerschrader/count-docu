@@ -190,6 +190,24 @@
                 ga('send', 'pageview', location.pathname + match[0]);
             });
         });
+
+        var copyTextareaBtn = document.querySelector('.js-copyCodeToBtn');
+
+        copyTextareaBtn.addEventListener('click', function(event) {
+          var textAreaToCopy = document.createElement('textarea');
+          textAreaToCopy.value = copyTextareaBtn.dataset.code;
+          document.body.appendChild(textAreaToCopy);
+          textAreaToCopy.select();
+
+          try {
+            document.execCommand('copy');
+          } catch (err) {
+            console.log('unable to copy to the clipboard');
+          } finally {
+              document.body.removeChild(textAreaToCopy);
+          }
+        });
+
     </script>
     {{/if}}
     </body>

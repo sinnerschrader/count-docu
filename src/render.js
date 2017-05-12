@@ -6,7 +6,7 @@ var refToLinkConverter = require("./util").refToLinkConverter;
 
 
 var init = function (options) {
-    var imageTemplate = options.imageTemplate || __dirname+"/image.hbs";
+    var imageTemplate = options.imageTemplate || __dirname + "/image.hbs";
     var imageTemplate = handlebars.compile(fs.readFileSync(imageTemplate, "UTF-8"));
 
     var markedRenderer = new marked.Renderer();
@@ -33,6 +33,22 @@ var init = function (options) {
         return "<div class=\"bs-" + type + " bs-" + type + "-" + level + "\">" + text + "</div>";
     }
 
+    originalCodeRenderer = markedRenderer.code.bind(markedRenderer);
+    markedRenderer.code = function (code, lang, escaped) {
+        var result = /(.*)\|(.*)/.exec(lang);
+        var originalLang = lang;
+
+        if (result !== null && result.length === 3 && result[2] === "ctc") {
+            originalLang = result[1];
+        }
+        var renderedCode = originalCodeRenderer(code, originalLang, escaped);
+
+        if (result !== null && result.length === 3 && result[2] === "ctc") {
+            var buttonString = "<button class='js-copyCodeToBtn code-button' data-code='" + code + "'>Copy code to clipboard</button>";
+            return renderedCode.replace(/<\/code>(.*)<\/pre>/, "</code>" + buttonString + "</pre>").replace("<pre>", "<pre class='code-pre'>");
+        }
+        return renderedCode;
+    };
 
     markedRenderer.table = function (header, body) {
         // TODO this is the bootstrap table
@@ -79,13 +95,13 @@ var init = function (options) {
         if (!source || source === "") {
             return "";
         }
-        var lines =  source.split('\n');
-        var keepEmptyLines=false
-        lines=lines.filter(function(line) {
-            if (!keepEmptyLines && line.trim().length==0) {
+        var lines = source.split('\n');
+        var keepEmptyLines = false
+        lines = lines.filter(function (line) {
+            if (!keepEmptyLines && line.trim().length == 0) {
                 return false;
             }
-            keepEmptyLines=true;
+            keepEmptyLines = true;
             return true;
         })
         return lines.join('<BR>');
@@ -119,7 +135,7 @@ var init = function (options) {
         }
         return link;
     });
-    
+
 
 }
 var render = function (template, ctx, options) {
