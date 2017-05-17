@@ -20,23 +20,111 @@
 
 </head>
 <body>
-    <div class="js_header bs-docs-header" style="background-color: {{headerBgColor}};" id="content" tabindex="-1">
-        <div class="container" >
-            <h1 style="color:{{headerColor}}">{{title}}</h1>
-            <p style="color:{{headerDescriptionColor}}">{{description}}</p>
-            {{#if pdfDownload}}
-                <div style="float:right;">
-                    <a href="index.pdf" target="_blank" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-download-alt"> PDF</span>
-                    </a>
-                </div>
-            {{/if}}
-        </div>
-    </div>
+<div class="js_header bs-docs-header" style="background-color: {{headerBgColor}};" id="content" tabindex="-1">
     <div class="container">
-        {{#if output.toc}}
-                <nav id="navigation" >
-                    <ul class="nav ">
+        <h1 style="color:{{headerColor}}">{{title}}</h1>
+        <p style="color:{{headerDescriptionColor}}">{{description}}</p>
+        {{#if pdfDownload}}
+            <div style="float:right;">
+                <a href="index.pdf" target="_blank" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-download-alt"> PDF</span>
+                </a>
+            </div>
+        {{/if}}
+    </div>
+</div>
+<div class="container">
+    {{#if output.toc}}
+    <nav id="navigation">
+        <ul class="nav ">
+            <li>
+                <a href="#history" class="history-nav">History</a>
+            </li>
+            {{#chapters}}
+                <li>
+                    <a href="#{{ref link}}">{{inc @index}} {{title}}</a>
+                    {{#if chapters}}
+                        <ul class="nav">
+                            {{#chapters}}
+                                <li>
+                                    <a href="#{{ref link}}">{{inc @../index}}.{{inc @index}} {{title}}</a>
+                                    {{#if chapters}}
+                                        <ul class="nav">
+                                            {{#chapters}}
+                                                <li>
+                                                    <a href="#{{ref link}}">{{inc @../../index}}.{{inc @../index}}.{{inc @index}} {{title}}</a>
+                                                </li>
+                                            {{/chapters}}
+                                        </ul>
+                                    {{/if}}
+                                </li>
+                            {{/chapters}}
+                        </ul>
+                    {{/if}}
+                </li>
+            {{/chapters}}
+        </ul>
+
+    {{/if}}
+    <div class="row {{#if output.pdf}}row-pdf{{/if}}">
+        <div class="{{#if output.html}}col-md-9{{/if}}" style="position:relative">
+            <div>
+                <h2 id="history">History</h2>
+                <table class="table">
+                    <tr>
+                        <th>date</th>
+                        <th>author</th>
+                        <th>message</th>
+                        <th>changed chapters</th>
+                    </tr>
+                    {{#history}}
+                        <tr>
+                            <td>{{formatDate date}}</td>
+                            <td>{{author}}</td>
+                            <td>{{{plaintext message}}}</td>
+                            <td>
+                                <ul>
+                                    {{#links}}
+                                        <li>
+                                            {{#if exists}}
+                                                <a href="#{{ref link}}">{{link}}</a>
+                                            {{else}}
+                                                <a class="broken-link">{{link}}</a>
+                                            {{/if}}
+                                        </li>
+                                    {{/links}}
+                                </ul>
+                            </td>
+                        </tr>
+                    {{/history}}
+                </table>
+            </div>
+
+            {{#chapters}}
+                <h2 id="{{ref link}}">{{inc @index}} {{title}}</h2>
+                {{{markdown content 2}}}
+                {{#sections}}
+                    {{{markdown . 3}}}
+                {{/sections}}
+                {{#chapters}}
+                    <h3 id="{{ref link}}">{{inc @../index}}.{{inc @index}} {{title}}</h3>
+                    {{{markdown content 3}}}
+                    {{#sections}}
+                        {{{markdown . 4}}}
+                    {{/sections}}
+                    {{#chapters}}
+                        <h4 id="{{ref link}}">{{inc @../../index}}.{{inc @../index}}.{{inc
+                                @index}}
+                            {{title}}</h4>
+                        {{{markdown content 4}}}
+                    {{/chapters}}
+                {{/chapters}}
+            {{/chapters}}
+        </div>
+        {{#if output.html}}
+            <div class="col-md-3">
+                <nav id="navigation" class="bs-docs-sidebar affix">
+                    <ul class="nav bs-docs-sidenav">
                         <li>
                             <a href="#history" class="history-nav">History</a>
                         </li>
@@ -64,116 +152,28 @@
                             </li>
                         {{/chapters}}
                     </ul>
-
-        {{/if}}
-        <div class="row {{#if output.pdf}}row-pdf{{/if}}">
-            <div class="{{#if output.html}}col-md-9{{/if}}" style="position:relative">
-                <div>
-                    <h2 id="history">History</h2>
-                    <table class="table">
-                        <tr>
-                            <th>date</th>
-                            <th>author</th>
-                            <th>message</th>
-                            <th>changed chapters</th>
-                        </tr>
-                        {{#history}}
-                            <tr>
-                                <td>{{formatDate date}}</td>
-                                <td>{{author}}</td>
-                                <td>{{{plaintext message}}}</td>
-                                <td>
-                                    <ul>
-                                        {{#links}}
-                                        <li>
-                                            {{#if exists}}
-                                                <a href="#{{ref link}}">{{link}}</a>
-                                            {{else}}
-                                                <a class="broken-link">{{link}}</a>
-                                            {{/if}}
-                                        </li>
-                                        {{/links}}
-                                    </ul>
-                                </td>
-                            </tr>
-                        {{/history}}
-                    </table>
-                </div>
-
-                {{#chapters}}
-                    <h2 id="{{ref link}}">{{inc @index}} {{title}}</h2>
-                    {{{markdown content 2}}}
-                    {{#sections}}
-                        {{{markdown . 3}}}
-                    {{/sections}}
-                    {{#chapters}}
-                        <h3 id="{{ref link}}">{{inc @../index}}.{{inc @index}} {{title}}</h3>
-                        {{{markdown content 3}}}
-                        {{#sections}}
-                            {{{markdown . 4}}}
-                        {{/sections}}
-                        {{#chapters}}
-                          <h4 id="{{ref link}}">{{inc @../../index}}.{{inc @../index}}.{{inc
-                                  @index}}
-                              {{title}}</h4>
-                            {{{markdown content 4}}}
-                        {{/chapters}}
-                    {{/chapters}}
-                {{/chapters}}
-            </div>
-            {{#if output.html}}
-            <div class="col-md-3">
-                <nav id="navigation" class="bs-docs-sidebar affix">
-                    <ul class="nav bs-docs-sidenav">
-                        <li>
-                            <a href="#history" class="history-nav">History</a>
-                        </li>
-                        {{#chapters}}
-                            <li>
-                                <a href="#{{ref link}}">{{inc @index}} {{title}}</a>
-                                {{#if chapters}}
-                                <ul class="nav">
-                                    {{#chapters}}
-                                        <li>
-                                            <a href="#{{ref link}}">{{inc @../index}}.{{inc @index}} {{title}}</a>
-                                            {{#if chapters}}
-                                            <ul class="nav">
-                                                {{#chapters}}
-                                                    <li>
-                                                        <a href="#{{ref link}}">{{inc @../../index}}.{{inc @../index}}.{{inc @index}} {{title}}</a>
-                                                    </li>
-                                                {{/chapters}}
-                                            </ul>
-                                            {{/if}}
-                                        </li>
-                                    {{/chapters}}
-                                </ul>
-                                {{/if}}
-                            </li>
-                        {{/chapters}}
-                    </ul>
                 </nav>
             </div>
-            {{/if}}
-        </div>
+        {{/if}}
     </div>
-    <footer class="footer">
-        <p>generated on {{formatDate date}} by <a href="https://github.com/sinnerschrader/count-docu">count-docu</a></p>
-    </footer>
+</div>
+<footer class="footer">
+    <p>generated on {{formatDate date}} by <a href="https://github.com/sinnerschrader/count-docu">count-docu</a></p>
+</footer>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="jquery/dist/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap/dist/js/bootstrap.js"></script>
-    {{#if output.html}}
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="jquery/dist/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="bootstrap/dist/js/bootstrap.js"></script>
+{{#if output.html}}
     <script>
         var headerHeight = document.querySelector(".js_header").getBoundingClientRect().height;
         var nav = $("#navigation");
         function checkScroll() {
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (headerHeight<scrollTop) {
+            if (headerHeight < scrollTop) {
                 nav.addClass("affix");
-            } else{
+            } else {
                 nav.removeClass("affix");
             }
         }
@@ -185,30 +185,33 @@
         checkScroll();
 
         $(document).ready(function () {
-            $('#navigation a').click(function(){
+            $('#navigation a').click(function () {
                 var match = $(this).attr('href').match(/#\S+/);
                 ga('send', 'pageview', location.pathname + match[0]);
             });
         });
 
-        var copyTextareaBtn = document.querySelector('.js-copyCodeToBtn');
+        var copyTextareaBtn = document.querySelectorAll('.js-copyCodeToBtn');
 
-        copyTextareaBtn.addEventListener('click', function(event) {
-          var textAreaToCopy = document.createElement('textarea');
-          textAreaToCopy.value = copyTextareaBtn.dataset.code;
-          document.body.appendChild(textAreaToCopy);
-          textAreaToCopy.select();
+        copyTextareaBtn.forEach(function (e) {
+            e.addEventListener('click', function (event) {
+                var textAreaToCopy = document.createElement('textarea');
+                textAreaToCopy.value = e.dataset.code;
+                document.body.appendChild(textAreaToCopy);
+                textAreaToCopy.select();
 
-          try {
-            document.execCommand('copy');
-          } catch (err) {
-            console.log('unable to copy to the clipboard');
-          } finally {
-              document.body.removeChild(textAreaToCopy);
-          }
-        });
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.log('unable to copy to the clipboard');
+                } finally {
+                    document.body.removeChild(textAreaToCopy);
+                }
+            }
+        )});
+
 
     </script>
-    {{/if}}
-    </body>
+{{/if}}
+</body>
 </html>

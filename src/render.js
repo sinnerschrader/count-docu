@@ -38,12 +38,11 @@ var init = function (options) {
         var result = /(.*)\|(.*)/.exec(lang);
         var originalLang = lang;
 
-        if (result !== null && result.length === 3 && result[2] === "ctc") {
+        if (result !== null && result.length === 3 && result[2] === "noctc") {
             originalLang = result[1];
         }
         var renderedCode = originalCodeRenderer(code, originalLang, escaped);
-
-        if (result !== null && result.length === 3 && result[2] === "ctc") {
+        if (!(result !== null && result.length === 3 && result[2] === "noctc") && options.ctcOnCodeBlock) {
             var buttonString = "<button class='js-copyCodeToBtn code-button' data-code='" + code + "'>Copy code to clipboard</button>";
             return renderedCode.replace(/<\/code>(.*)<\/pre>/, "</code>" + buttonString + "</pre>").replace("<pre>", "<pre class='code-pre'>");
         }

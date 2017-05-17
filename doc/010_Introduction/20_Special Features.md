@@ -28,9 +28,23 @@ There are three different callouts : warning, danger and info.
  
  # Copy to Clipboard Button
  
- Adding a copy to clipboard button by extending the language in a code by "|ctc". All code inside the block will be copied.
- The button will appear while hovering over the code block.
+ A copy to clipboard button will added to all code blocks by default. This can be overruled by the adding "|noctc".
+
+
+     ```` md|noctc
+     this code has no copy to clipboard button 
+     ```` 
+   
  
- ````md|ctc
- this text will be copied to the clipboard
+ ````md|noctc
+ this code has no copy to clipboard button
  ````
+ 
+      ```` md
+      this code has a copy to clipboard button 
+      ```` 
+    
+  
+  ````md
+  this code has a copy to clipboard button
+  ````

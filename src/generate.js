@@ -110,6 +110,7 @@ function generate(options) {
     doc.links = collectLinks(doc);
     doc.output = {pdf: options.pdf, html: !options.pdf};
     doc.pdfDownload = options.pdfDownload;
+    doc.ctcOnCodeBlock = options.ctcOnCodeBlock;
 
     if (!options.pdf) {
         doc.toc = false;
